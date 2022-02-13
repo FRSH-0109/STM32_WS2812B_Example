@@ -15,6 +15,8 @@
 #include "string.h"
 #include "stdint.h"
 
+#include "math.h"
+
 #define LED_AMOUNT 30
 #define RESET_BYTES_AMOUNT 72
 #define PWM_VALUE_ONE 52
@@ -33,4 +35,6 @@ void ws2812bLedStructInit(ws2812bLedStruct *ledsStrip);
 void ws2812bGetBytesArray(ws2812bLedStruct *ledsStrip);
 void ws2812bSetRGB(ws2812bLedStruct *ledsStrip, uint16_t index, uint8_t Red, uint8_t Green, uint8_t Blue);
 void ws2812bClearAll(ws2812bLedStruct *ledsStrip);
+void ws2812bWave(ws2812bLedStruct *ledStrip, uint16_t width, uint8_t Red, uint8_t Green, uint8_t Blue);
+
 #endif

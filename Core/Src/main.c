@@ -26,6 +26,8 @@
 /* USER CODE BEGIN Includes */
 #include "ws2812b_driver.h"
 #include "stdbool.h"
+
+#include <stdlib.h>     /* srand, rand */
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -56,7 +58,6 @@ ws2812bLedStruct ledStrip;
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 void WS2812_Send(ws2812bLedStruct * ledStrip);
-//void WS2812_Clear_All(uint32_t * led_array, uint16_t length);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -105,25 +106,10 @@ int main(void)
 		/* USER CODE END WHILE */
 
 		/* USER CODE BEGIN 3 */
-		for(int time = 0; time < 29; ++time)
-		{
-			for(int var = time; var < ledStrip.length-time; ++var)
-			{
-				ws2812bClearAll(&ledStrip);
-				ws2812bSetRGB(&ledStrip, var, 6, 0, 25);
-				ws2812bGetBytesArray(&ledStrip);
-				WS2812_Send(&ledStrip);
-				HAL_Delay(10);
-			}
-			for(int var = ledStrip.length-1-time; var >= 0+time; --var)
-			{
-				ws2812bClearAll(&ledStrip);
-				ws2812bSetRGB(&ledStrip, var, 12, 25, 0);
-				ws2812bGetBytesArray(&ledStrip);
-				WS2812_Send(&ledStrip);
-				HAL_Delay(10);
-			}
-		}
+		ws2812bWave(&ledStrip, 30, 5, 50, 5);
+		ws2812bGetBytesArray(&ledStrip);
+		WS2812_Send(&ledStrip);
+		HAL_Delay(50);
 	}
 	/* USER CODE END 3 */
 }
@@ -174,25 +160,6 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 void WS2812_Send(ws2812bLedStruct * ledStrip)
 {
-	//	for(int var = 0; var < 72; ++var)
-	//	{
-	//		ledStrip->pwmData[var] = 0;
-	//	}
-	//	for(int8_t led_num = (ledStrip->length-1); led_num >= 0; led_num--)
-	//	{
-	//		for (int i= 23; i>=0; i--)
-	//		{
-	//			if(ledStrip->ledArray[led_num] &(1<<i))
-	//			{
-	//				ledStrip->pwmData[i+72+(led_num*24)] = 54;
-	//			}
-	//			else
-	//			{
-	//				ledStrip->pwmData[i+72+(led_num*24)] = 27;
-	//			}
-	//		}
-	//	}
-
 	HAL_TIM_PWM_Start_DMA(&htim1, TIM_CHANNEL_1, (uint32_t *)ledStrip->pwmData, ledStrip->bytesToSend);
 	while (!ledStrip->dataSentFlag){};
 	ledStrip->dataSentFlag = 0;

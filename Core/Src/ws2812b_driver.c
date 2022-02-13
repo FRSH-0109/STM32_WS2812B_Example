@@ -59,3 +59,16 @@ void ws2812bClearAll(ws2812bLedStruct *ledStrip)
 {
 	memset(ledStrip->ledArray, 0, sizeof(ledStrip->ledArray[0])*ledStrip->length);
 }
+
+void ws2812bWave(ws2812bLedStruct *ledStrip, uint16_t width, uint8_t Red, uint8_t Green, uint8_t Blue)
+{
+	uint16_t wave_step = 255 / width;
+	static uint8_t value = 0;
+
+	for(uint16_t index = 0; index < LED_AMOUNT ; ++index)
+	{
+		double valueByIndex = (((index + value)*wave_step)%256) / 255.0;
+		ws2812bSetRGB(ledStrip, index, Red*valueByIndex, Green*valueByIndex, Blue*valueByIndex);
+	}
+	value++;
+}
