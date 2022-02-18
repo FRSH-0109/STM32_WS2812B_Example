@@ -4,7 +4,7 @@ Projects uses my WS2812B LEDs driver library for controlling whole tape/strip of
 Used:
 - STM32G030C8 microcontroller
 - WS2812B addressable LEDs tape
-- STM32CubeIDE (dedicated IDE for STM microcontrollers)  
+- STM32CubeIDE (dedicated IDE for ST microcontrollers)  
 
 WS2812B driver libs are written in C and are separated from STM32 HAL or other hardware dependent parts of project.
 Library consists of:
