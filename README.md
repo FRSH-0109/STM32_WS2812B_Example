@@ -1,10 +1,10 @@
-# STM32_WS2812B_Example
+# STM32_WS2812B_Example  
+Projects uses my WS2812B LEDs driver library for controlling whole tape/strip of addressable LEDs. Certain protocol is achieved by controlling PWM via DMA mode. List of values prepared for every single diode is transfered as PWM signal of exact period time. It is expected that user knows how to configure new project and etc. in STM32CubeIDE.  
+
 Used:
 - STM32G030C8 microcontroller
 - WS2812B addressable LEDs tape
-- STM32CubeIDE (dedicated IDE for STM microcontrollers)
-
-Projects uses my WS2812B LEDs driver library for controlling whole tape/strip of addressable LEDs. Certain protocol is achieved by controlling PWM via DMA mode. List of values prepared for every single diode is send by DMA-memory to peripheral mode. It is expected that user knows how to configure new project and etc. in STM32CubeIDE.  
+- STM32CubeIDE (dedicated IDE for STM microcontrollers)  
 
 WS2812B driver libs are written in C and are separated from STM32 HAL or other hardware dependent parts of project.
 Library consists of:
@@ -13,15 +13,20 @@ Library consists of:
 
 They can be found here: https://github.com/FRSH-0109/WS2812B_LED_Strip_Driver.git  
   
-  
 ## How to use?  
 
+- [Configure Hardware](#configure-hardware)
+- [Prepare custom send function](#prepare-custom-send-function)
+- [Usage example](#usage-example)  
+
+----
 ### Get familiar with README file in the driver repository  
 It describes what should be changed in the driver header file.  
 Driver .c and .h files have to be copied/imported to your project Src( .c) and Inc( .h) folders.  
 https://github.com/FRSH-0109/WS2812B_LED_Strip_Driver.git  
 
-### Configure hardware  
+----
+### Configure hardware
 
 **Set MCU clock and timers clock frequnecy**  
 In my project the frequency of mcu is set to 64MHz, as well as clock source for Timers(APB timer clocks)  
@@ -51,7 +56,7 @@ Incerement adderess:	memory only
 
 ![Screenshot from 2022-02-18 14-50-10](https://user-images.githubusercontent.com/64641846/154695091-91d10e76-2c02-4f73-9f02-80952be21c46.png)
 
-
+----
 ### Prepare custom send function
 
 To make whole driver library more hardware independent, send function have to be created by user.  
@@ -67,6 +72,13 @@ In case using the STM32 HAL, it will look like this:
 
 **Timer pulse finished interrupt**  
 It is necessary to handle function which controls when data array has been send completely. I used HAL interrupt routine which is marked as `__weak` in default HAL files. After the last byte of data has been represented as PWM signal, interrupt changes `dataSentFlag`, so next send function can be executed successfully. Also the Timer PWM DMA sending routine is stopped, because normally it would work continiously.  
-![Screenshot from 2022-02-18 17-08-25](https://user-images.githubusercontent.com/64641846/154721996-1d147025-e462-4abc-8ca3-2332ac2d607f.png)
+![Screenshot from 2022-02-18 17-08-25](https://user-images.githubusercontent.com/64641846/154721996-1d147025-e462-4abc-8ca3-2332ac2d607f.png)  
 
+----
+### Usage example
 
+Setting red color on every two diodes. Delay can be removed  
+![Screenshot from 2022-02-18 17-42-16](https://user-images.githubusercontent.com/64641846/154725502-14534026-98d9-4ba1-b2e3-246caa9b1c13.png)  
+
+Creating wave effect on led tape(changable width). Every call of wave function generates next frame of it.  
+![Screenshot from 2022-02-18 14-57-19](https://user-images.githubusercontent.com/64641846/154723866-fc7a148d-bee8-4f15-9bb7-7f10de8637da.png)  
